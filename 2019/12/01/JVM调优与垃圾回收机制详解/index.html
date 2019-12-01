@@ -5,17 +5,17 @@
   
 
   
-  <title>Hello World | DreamCoder的博客</title>
+  <title>JVM调优与垃圾回收机制详解 | DreamCoder的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="JVM内存模型">
 <meta name="keywords" content="技术博客,并发,框架">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https:&#x2F;&#x2F;wlmydream.github.io&#x2F;dreamcoder.github.io&#x2F;2019&#x2F;11&#x2F;30&#x2F;hello-world&#x2F;index.html">
+<meta property="og:title" content="JVM调优与垃圾回收机制详解">
+<meta property="og:url" content="https:&#x2F;&#x2F;wlmydream.github.io&#x2F;dreamcoder.github.io&#x2F;2019&#x2F;12&#x2F;01&#x2F;JVM%E8%B0%83%E4%BC%98%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3&#x2F;index.html">
 <meta property="og:site_name" content="DreamCoder的博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="JVM内存模型">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-11-30T14:50:34.923Z">
+<meta property="og:updated_time" content="2019-12-01T07:46:23.112Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/dreamcoder.github.io/atom.xml" title="DreamCoder的博客" type="application/atom+xml">
@@ -67,10 +67,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-JVM调优与垃圾回收机制详解" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/dreamcoder.github.io/2019/11/30/hello-world/" class="article-date">
-  <time datetime="2019-11-30T14:30:01.767Z" itemprop="datePublished">2019-11-30</time>
+    <a href="/dreamcoder.github.io/2019/12/01/JVM%E8%B0%83%E4%BC%98%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/" class="article-date">
+  <time datetime="2019-12-01T07:45:32.000Z" itemprop="datePublished">2019-12-01</time>
 </a>
     
   </div>
@@ -81,7 +81,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      JVM调优与垃圾回收机制详解
     </h1>
   
 
@@ -89,24 +89,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo server</span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo generate</span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
+        <h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://wlmydream.github.io/dreamcoder.github.io/2019/11/30/hello-world/" data-id="ck3mpc99e0001qk7g4bn5fplf" class="article-share-link">Share</a>
+      <a data-url="https://wlmydream.github.io/dreamcoder.github.io/2019/12/01/JVM%E8%B0%83%E4%BC%98%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/" data-id="ck3mpc9950000qk7gejnoatbq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -115,15 +102,11 @@
     
 <nav id="article-nav">
   
-    <a href="/dreamcoder.github.io/2019/11/30/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          我的第一篇博客
-        
-      </div>
-    </a>
   
+    <a href="/dreamcoder.github.io/2019/11/30/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">我的第一篇博客</div>
+    </a>
   
 </nav>
 
